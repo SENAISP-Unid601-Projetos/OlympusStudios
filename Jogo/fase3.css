@@ -1,0 +1,136 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('IMG/fundotela.png'); /* Caminho da imagem */
+    background-size: cover; /* Ajusta para cobrir toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita repetição da imagem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+canvas {
+    background-image: url('IMG/fundolago.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    display: block;
+}
+
+/* Fala do NPC no início (à direita) */
+#fala1 {
+    position: absolute;
+    bottom: 30%;
+    left: 75%;
+    transform: translateX(-50%);
+    width: 80%;
+    max-width: 700px;
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+/* Fala de parabéns após derrotar todos os fantasmas (à esquerda) */
+#parabensFantasmas {
+    position: absolute;
+    bottom: 15%;
+    left: 34%;
+    width: auto; /* Pode deixar que a largura seja automática */
+    max-width: 600px; /* Limita a largura máxima */
+    max-height: 600px; /* Limita a altura máxima */
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+#parabensFantasmas img {
+    width: 100%;
+    height: auto; /* Mantém as proporções */
+    object-fit: contain; /* Garante que a imagem se ajuste sem cortar partes */
+}
+
+#restartButton {
+    display: none;
+}
+
+#proximaFase3 {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px; /* Tamanho do botão */
+    font-size: 18px; /* Tamanho da fonte */
+    background-color: #30797d; /* Cor de fundo azul */
+    color: white; /* Cor do texto */
+    border: none; /* Remover bordas */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+    cursor: pointer; /* Cursor em formato de mãozinha */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transições para animação */
+    opacity: 0; /* Inicialmente invisível */
+}
+
+/* Estilo para o botão ao passar o mouse por cima */
+#proximaFase3:hover {
+    background-color: #244f51; /* Cor de fundo mais escura ao passar o mouse */
+    transform: translate(-50%, -50%) scale(1.1); /* Aumentar o tamanho do botão */
+}
+
+/* Estilo para o botão ao clicar */
+#proximaFase3:active {
+    transform: translate(-50%, -50%) scale(1); /* Reduzir o botão de volta ao normal */
+}
+
+/* Estilo para o botão inicialmente oculto */
+#proximaFase3.oculto {
+    display: none;
+}
+
+/* Mostrar o botão com a classe "mostrar" */
+#proximaFase3.mostrar {
+    display: block;
+    opacity: 1; /* Torna o botão visível */
+    transform: translate(-50%, -50%) scale(1); /* Aplica o estilo de posição e escala */
+}
+
+
+
+
+/* Estilo para o botão de reiniciar */
+#restartButton {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px; /* Tamanho do botão */
+    font-size: 18px; /* Tamanho da fonte */
+    background-color: #c45e48; /* Cor de fundo verde */
+    color: white; /* Cor do texto */
+    border: none; /* Remover bordas */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+    cursor: pointer; /* Cursor em formato de mãozinha */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transições para animação */
+}
+
+/* Estilo para o botão ao passar o mouse por cima */
+#restartButton:hover {
+    background-color: #ff4500; /* Cor de fundo mais escura ao passar o mouse */
+    transform: translate(-50%, -50%) scale(1.1); /* Aumentar o tamanho do botão */
+}
+
+/* Estilo para o botão ao clicar */
+#restartButton:active {
+    transform: translate(-50%, -50%) scale(1); /* Reduzir o botão de volta ao normal */
+}
+
+/* Estilo para o botão inicialmente oculto */
+#restartButton[style="display: none;"] {
+    display: none;
+}
+
+/* Mostrar o botão com a classe "mostrar" */
+#restartButton.mostrar {
+    display: block;
+}

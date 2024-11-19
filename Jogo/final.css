@@ -1,0 +1,66 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('IMG/fundotela.png'); /* Caminho da imagem */
+    background-size: cover; /* Ajusta para cobrir toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita repetição da imagem */
+}
+
+#finalScene {
+    text-align: center;
+}
+
+#npcFinal {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#items img {
+    width: 500px; /* Ajuste o tamanho conforme necessário */
+    height: auto;
+}
+
+#items img {
+    max-width: 100%;
+    height: auto;
+}
+
+#items {
+    margin-top: 20px;
+}
+
+#items img {
+    margin: 0 10px;
+    width: 100px;
+}
+
+#decisionText p {
+    font-size: 20px;
+    color: white;
+}
+
+#decisionButtons {
+    margin-top: 20px;
+}
+
+#decisionButtons button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.oculto {
+    display: none;
+}
+
+#videoRealWorld {
+    margin-top: 20px;
+}

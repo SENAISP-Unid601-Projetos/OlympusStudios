@@ -1,0 +1,163 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* Evitar rolagem */
+    font-family: Arial, sans-serif;
+    background-color: #363636;
+}
+
+#menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000; /* Cor de fundo caso a imagem não carregue */
+}
+
+#fundo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+#botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1;
+}
+
+button {
+    background-color: #6e6e6e;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+button:hover {
+    background-color: #4e4e4e;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+#video-section, #sobre-section {
+    display: none; /* Oculto até ser ativado */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+}
+
+.oculto {
+    display: none; /* Certifica-se de que está escondido no início */
+}
+
+#video-intro {
+    max-width: 80%;
+    margin-bottom: 20px;
+}
+
+#btn-aventura {
+    margin-top: -10px;
+}
+
+
+/* Css para a pgn sobre o jogo*/
+
+#sobre-section {
+    display: none; /* Mantém oculto por padrão */
+    background-color: #f8f9fa; /* Cor de fundo neutra */
+    color: #333; /* Texto em cor escura para contraste */
+    font-family: 'Arial', sans-serif;
+    padding: 20px;
+    border-radius: 55px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Sombra para destacar */
+    max-width: 800px;
+    margin: 50px auto; /* Centralizado */
+    text-align: center; /* Alinhamento do texto */
+    animation: fadeIn 0.8s ease-in-out; /* Animação de entrada */
+}
+
+#sobre-section h1, #sobre-section h2 {
+    font-family: 'Georgia', serif; /* Fonte com estilo clássico para títulos */
+    margin-bottom: 15px;
+    color: #222;
+}
+
+#sobre-section h1 {
+    font-size: 2.5em;
+    text-transform: uppercase;
+    border-bottom: 2px solid #ddd;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+#sobre-section p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+#sobre-section strong {
+    color: #555; /* Destaque discreto */
+}
+
+#sobre-section .equipe, #sobre-section .controles {
+    margin-top: 30px;
+}
+
+#sobre-section ul {
+    list-style-type: none; /* Remove marcadores */
+    padding: 0;
+}
+
+#sobre-section ul li {
+    font-size: 1.1em;
+    margin: 5px 0;
+}
+
+#sobre-section #btn-voltar {
+    display: inline-block;
+    background-color: #555;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 30px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#sobre-section #btn-voltar:hover {
+    background-color: #333;
+    transform: scale(1.05); /* Leve aumento no tamanho */
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+

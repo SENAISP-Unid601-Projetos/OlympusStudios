@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contato - The Oracle</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background-color: #000; /* Fundo escuro para destacar a imagem */
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        .voltar {
+            width: 50px;
+            height: 50px;
+            z-index: 2;
+            position: absolute;
+            top: 80px; /* Define a posição do topo */
+            left: 80px; /* Define a posição da esquerda */
+        }
+
+        .voltar-topo {
+            width: 50px;
+            height: 50px;
+            z-index: 2;
+            position: fixed; /* Fixa o botão na página */
+            bottom: 20px; /* Distância do botão ao fundo da página */
+            right: 20px; /* Distância do botão à direita da página */
+            cursor: pointer; /* Troca o cursor para mão ao passar por cima */
+            display: none; /* O botão só aparecerá ao rolar a página */
+        }
+
+    </style>
+      
+
+</head>
+<body>
+    <a href="index.html"><img  class="voltar" src="img/back (1).png" alt="Botão voltar"></a>
+    <img src="img/pra-cima.png" alt="Voltar ao Topo" class="voltar-topo" id="botaoTopo">
+
+    <img src="img/contact.png" alt="História - The Oracle">
+
+    <script>
+        // Exibir o botão quando o usuário rolar para baixo 100px
+        window.onscroll = function() {mostrarBotaoTopo()};
+
+        function mostrarBotaoTopo() {
+            var botao = document.getElementById("botaoTopo");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                botao.style.display = "block";
+            } else {
+                botao.style.display = "none";
+            }
+        }
+
+        // Função para rolar de volta ao topo
+        document.getElementById("botaoTopo").onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+
+</body>
+</html>

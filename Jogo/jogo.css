@@ -1,0 +1,135 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column; /* Muda para coluna para alinhar os itens verticalmente */
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-image: url('IMG/fundotela.png'); /* Caminho da imagem */
+    background-size: cover; /* Ajusta para cobrir toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita repetição da imagem */
+}
+
+canvas {
+    background-image: url('IMG/fundo floresta.png');
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #000000;
+}
+
+#falaNPC1, #falaNPC2, #npcParabens, #proximaFase, #reiniciarJogo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+.oculto {
+    display: none;
+}
+
+#falaNPC1, #falaNPC2 {
+    top: 15%; 
+}
+
+#falaNPC1 img, #falaNPC2 img {
+    width: 600px;
+    height: auto;
+}
+
+#npcParabens {
+    top: 20%; 
+    left: 18%;
+}
+
+#npcParabens img {
+    width: 600px;
+    height: auto;
+}
+
+#botoesContainer {
+    text-align: center; /* Centraliza o botão */
+    margin-top: 20px; /* Espaço acima do botão */
+}
+
+/* Estilo para o botão de avançar para a Fase 2 */
+#botaoAvancar {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px; /* Tamanho do botão */
+    font-size: 18px; /* Tamanho da fonte */
+    background-color: #30797d; /* Cor de fundo azul */
+    color: white; /* Cor do texto */
+    border: none; /* Remover bordas */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+    cursor: pointer; /* Cursor em formato de mãozinha */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transições para animação */
+}
+
+/* Estilo para o botão ao passar o mouse por cima */
+#botaoAvancar:hover {
+    background-color: #244f51; /* Cor de fundo mais escura ao passar o mouse */
+    transform: translate(-50%, -50%) scale(1.1); /* Aumentar o tamanho do botão */
+}
+
+/* Estilo para o botão ao clicar */
+#botaoAvancar:active {
+    transform: translate(-50%, -50%) scale(1); /* Reduzir o botão de volta ao normal */
+}
+
+/* Estilo para o botão inicialmente oculto */
+#botaoAvancar.oculto {
+    display: none;
+}
+
+/* Mostrar o botão com a classe "mostrar" */
+#botaoAvancar.mostrar {
+    display: block;
+}
+
+
+/* Estilo para o botão de reiniciar */
+#botaoReiniciar {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px; /* Tamanho do botão */
+    font-size: 18px; /* Tamanho da fonte */
+    background-color: #c45e48; /* Cor de fundo */
+    color: white; /* Cor do texto */
+    border: none; /* Remover bordas */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+    cursor: pointer; /* Cursor em formato de mãozinha */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transições para animação */
+}
+
+/* Estilo para o botão ao passar o mouse por cima */
+#botaoReiniciar:hover {
+    background-color: #ff4500; /* Cor de fundo ao passar o mouse */
+    transform: translate(-50%, -50%) scale(1.1); /* Aumentar o tamanho do botão */
+}
+
+/* Estilo para o botão ao clicar */
+#botaoReiniciar:active {
+    transform: translate(-50%, -50%) scale(1); /* Reduzir o botão de volta ao normal */
+}
+
+/* Definir como oculto se não for necessário */
+.oculto {
+    display: none;
+}
+
+
+
+#gameCanvas {
+    position: relative;
+    z-index: 1;
+}

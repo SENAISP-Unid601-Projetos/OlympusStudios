@@ -1,0 +1,70 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #3b5880;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.intro-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 10;
+}
+
+.intro-image {
+    width: 500px;
+    height: auto;
+}
+
+.canvas-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+canvas {
+    background-image: url('IMG/caverna.png');
+    background-size: cover;
+    background-position: center;
+    display: block;
+}
+
+#npcGandon {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: subirNpc 1s ease;
+    width: 200px;
+}
+
+#parabens {
+    width: 0;
+    height: auto;
+    opacity: 0;
+    transition: width 2s ease, opacity 2s ease;
+}
+
+#parabens.grande {
+    width: 800px;
+    opacity: 1;
+}
+
+@keyframes subirNpc {
+    from {
+        opacity: 0;
+        bottom: -100px;
+    }
+    to {
+        opacity: 1;
+        bottom: 10px;
+    }
+}

@@ -1,0 +1,112 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-image: url('IMG/fundotela.png'); /* Caminho da imagem */
+    background-size: cover; /* Ajusta para cobrir toda a tela */
+    background-position: center; /* Centraliza a imagem */
+    background-repeat: no-repeat; /* Evita repetição da imagem */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.intro-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 10;
+}
+
+.intro-image {
+    width: 500px;
+    height: auto;
+}
+
+.canvas-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+canvas {
+    background-image: url('IMG/caverna.png');
+    background-size: cover;
+    background-position: center;
+    display: block;
+}
+
+#npcGandon {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: subirNpc 1s ease;
+    width: 200px;
+}
+
+#parabens {
+    width: 0;
+    height: auto;
+    opacity: 0;
+    transition: width 2s ease, opacity 2s ease;
+}
+
+#parabens.grande {
+    width: 800px;
+    opacity: 1;
+}
+
+@keyframes subirNpc {
+    from {
+        opacity: 0;
+        bottom: -100px;
+    }
+    to {
+        opacity: 1;
+        bottom: 10px;
+    }
+}
+
+
+/* Estilo para o botão de reiniciar */
+#restartButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px; /* Tamanho do botão */
+    font-size: 18px; /* Tamanho da fonte */
+    background-color: #c45e48; /* Cor de fundo verde */
+    color: white; /* Cor do texto */
+    border: none; /* Remover bordas */
+    border-radius: 10px; /* Bordas arredondadas */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra */
+    cursor: pointer; /* Cursor em formato de mãozinha */
+    transition: background-color 0.3s ease, transform 0.2s ease; /* Transições para animação */
+}
+
+/* Estilo para o botão ao passar o mouse por cima */
+#restartButton:hover {
+    background-color: #ff4500; /* Cor de fundo mais escura ao passar o mouse */
+    transform: translate(-50%, -50%) scale(1.1); /* Aumentar o tamanho do botão */
+}
+
+/* Estilo para o botão ao clicar */
+#restartButton:active {
+    transform: translate(-50%, -50%) scale(1); /* Reduzir o botão de volta ao normal */
+}
+
+/* Estilo para o botão inicialmente oculto */
+#restartButton[style="display: none;"] {
+    display: none;
+}
+
+/* Mostrar o botão com a classe "mostrar" */
+#restartButton.mostrar {
+    display: block;
+}

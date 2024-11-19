@@ -1,0 +1,10 @@
+.button {
+    background-color: transparent; /* Remove a cor de fundo */
+    border: none; /* Remove a borda */
+    border-radius: 5px; /* Mantém a borda arredondada se necessário */
+    padding: 50px 25px; /* Mantém o tamanho clicável */
+    font-size: 18px; /* Pode ser removido, já que o texto não será visível */
+    cursor: pointer;
+    position: absolute; /* Para manter a posição sobre a imagem */
+    opacity: 0; /* Torna o botão invisível */
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu do Jogo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="menu">
+        <img src="IMG/Capa_TheOracle.png" alt="Imagem de Fundo" id="fundo">
+        <div id="botoes">
+            <button id="btn-jogar">Jogar</button>
+            <button id="btn-sobre">Sobre o Jogo</button>
+            <button id="btn-sair">Sair</button>
+        </div>
+    </div>
+
+    <div id="video-section" class="oculto">
+        <video id="video-intro" width="80%" controls>
+            <source src="IMG/Grupo7 VideoPersonagem.mp4" type="video/mp4">
+            Seu navegador não suporta o formato de vídeo.
+        </video>
+        <button id="btn-aventura">Se aventurar</button>
+    </div>
+
+    <div id="sobre-section" class="oculto">
+        <h1>Sobre o Jogo</h1>
+        <p>
+            <strong>The Oracle</strong> é um jogo estilo Metroidvania, ambientado no mundo fantástico de Elderwood. <br>
+            O jogador controla <strong>Eidan</strong>, um personagem em busca de respostas sobre sua conexão com uma antiga profecia, guiado pelos Guardiões do Reino. 
+            <br><br>
+            Através da coleta de itens e interação com NPCs, o objetivo é restaurar o equilíbrio natural do mundo.
+        </p>
+        <div class="equipe">
+            <h2>Equipe de Desenvolvimento</h2>
+            <ul>
+                <li><strong>Monteiro</strong>: Programador</li>
+                <li><strong>Thaissa</strong>: Edição de Vídeo</li>
+                <li><strong>Julia Bora</strong>: Ilustrações</li>
+                <li><strong>Fabiana</strong>: Scrum Master</li>
+            </ul>
+        </div>
+        <div class="controles">
+            <h2>Controles</h2>
+            <p>W, A, S, D e mouse.</p>
+        </div>
+        <button id="btn-voltar">Voltar</button>
+    </div>
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
