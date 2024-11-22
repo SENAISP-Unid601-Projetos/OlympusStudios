@@ -4,8 +4,8 @@ const larguraCanvas = canvas.width;
 const alturaCanvas = canvas.height;
 
 // Configuração da largura e altura dos frames da spritesheet
-const larguraFrameSprite = 480;
-const alturaFrameSprite = 648;
+const larguraFrameSprite = 1441 / 3;
+const alturaFrameSprite = 2593 / 4;
 
 let personagem = {
     x: 100,
@@ -16,10 +16,12 @@ let personagem = {
     spriteSheet: new Image(),
     spriteWidth: larguraFrameSprite,
     spriteHeight: alturaFrameSprite,
-    frame: 0,
-    totalFrames: 12,
+    totalFrames: 3,
     tempoFrame: 200,
-    lastFrameTime: 0
+    lastFrameTime: 0,
+    coluna: 0,
+    linha: 0,
+    ultimalinha: 0,
 };
 
 personagem.spriteSheet.src = 'IMG/sprite eidan555.png';
@@ -75,19 +77,57 @@ const teclas = {
 };
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'w') teclas.w = true; 
-    if (e.key === 'a') teclas.a = true;
-    if (e.key === 's') teclas.s = true;
-    if (e.key === 'd') teclas.d = true;
+    if (e.key === 'w') {
+        teclas.w = true;
+        personagem.linha = 1;
+        personagem.ultimalinha = 1;
+    };
+    if (e.key === 'a') {
+        teclas.a = true;
+        personagem.linha = 2;
+        personagem.ultimalinha = 2;
+    };
+    if (e.key === 's') {
+        teclas.s = true;
+        personagem.linha = 0;
+        personagem.ultimalinha = 0;
+    };
+    if (e.key === 'd') {
+        teclas.d = true;
+        personagem.linha = 3;
+        personagem.ultimalinha = 3;
+    };
+
+    if (personagem.coluna < 2.9) {
+        personagem.coluna += 0.05;
+    } else { personagem.coluna >= 2.9 };
 });
 
 document.addEventListener('keyup', (e) => {
-    if (e.key === 'w') teclas.w = false;
-    if (e.key === 'a') teclas.a = false;
-    if (e.key === 's') teclas.s = false;
-    if (e.key === 'd') teclas.d = false;
-    personagem.frame = 8; // Frame de descanso
+    if (e.key === 'w') {
+        teclas.w = false;
+    };
+    if (e.key === 'a') { teclas.a = false };
+    if (e.key === 's') { teclas.s = false };
+    if (e.key === 'd') { teclas.d = false };
+    if (!teclas.w && !teclas.a && !teclas.s && !teclas.d) {
+        personagem.linha = personagem.ultimalinha
+        personagem.coluna = 0;
+    }
+
 });
+
+function atualizarColuna() {
+    if (teclas.w || teclas.a || teclas.s || teclas.d) {
+        if (personagem.coluna < 2) {
+            personagem.coluna += 0.05; // Incrementa a coluna
+        } else {
+            personagem.coluna = 0; // Reseta a coluna
+        }
+    } else {
+        personagem.coluna = 0; // Reseta a coluna se não houver movimento
+    }
+}
 
 // Variável para a imagem de parabéns
 const imagemParabens = new Image();
@@ -97,8 +137,8 @@ let mostrarParabens = false;
 
 
 // Variáveis de tamanho para a imagem de parabéns
-let larguraParabens = 300;  // Largura inicial
-let alturaParabens = 300;   // Altura inicial
+let larguraParabens = 300; // Largura inicial
+let alturaParabens = 300; // Altura inicial
 
 // Função para ajustar o tamanho da imagem de parabéns
 function ajustarTamanhoParabens(novaLargura, novaAltura) {
@@ -112,7 +152,7 @@ ajustarTamanhoParabens(600, 600);
 
 
 const imagemFinal = new Image();
-imagemFinal.src = 'falas/tauronfala4.png';  // Defina o caminho para a sua imagem final
+imagemFinal.src = 'falas/tauronfala4.png'; // Defina o caminho para a sua imagem final
 let mostrarFinal = false;
 
 // Defina a função que será chamada assim que a imagem for carregada
@@ -167,11 +207,13 @@ obstaculos.forEach(obstaculo => {
 });
 
 // Variável para rastrear se o jogador colidiu com o fantasma
-let colidiuComFantasma = false;  // Variável para rastrear se houve colisão com o fantasma
+let colidiuComFantasma = false; // Variável para rastrear se houve colisão com o fantasma
 
 // Função de atualização do jogo
 function atualizar() {
     if (!jogoAtivo) return;
+
+    atualizarColuna();
     // Atualize a visibilidade da barra de recompensas
     let novaPosicaoX = personagem.x;
     let novaPosicaoY = personagem.y;
@@ -226,7 +268,7 @@ function atualizar() {
 
         if (detectarColisao(personagem, fantasma)) {
             jogoAtivo = false;
-            colidiuComFantasma = true;  // Marca que o jogador colidiu com o fantasma
+            colidiuComFantasma = true; // Marca que o jogador colidiu com o fantasma
             setTimeout(() => {
                 botaoReiniciar.classList.remove('oculto');
             }, 1000);
@@ -237,7 +279,7 @@ function atualizar() {
         jogoAtivo = false;
         mostrarParabens = true;
         setTimeout(() => {
-            mostrarFinal = true;  // A imagem final só deve aparecer após os parabéns
+            mostrarFinal = true; // A imagem final só deve aparecer após os parabéns
             botaoAvancar.classList.remove('oculto');
         }, 1000);
     }
@@ -245,10 +287,10 @@ function atualizar() {
 
 // Função para detectar colisões entre dois objetos
 function detectarColisao(objeto1, objeto2) {
-    return !(objeto1.x + objeto1.largura < objeto2.x || 
-             objeto1.x > objeto2.x + objeto2.largura || 
-             objeto1.y + objeto1.altura < objeto2.y || 
-             objeto1.y > objeto2.y + objeto2.altura);
+    return !(objeto1.x + objeto1.largura < objeto2.x ||
+        objeto1.x > objeto2.x + objeto2.largura ||
+        objeto1.y + objeto1.altura < objeto2.y ||
+        objeto1.y > objeto2.y + objeto2.altura);
 }
 
 // Função de renderização do jogo
@@ -266,10 +308,9 @@ function renderizar() {
     });
 
     ctx.drawImage(
-        personagem.spriteSheet,
-        personagem.frame * personagem.spriteWidth, 0, 
-        personagem.spriteWidth, personagem.spriteHeight, 
-        personagem.x, personagem.y, 
+        personagem.spriteSheet, Math.floor(personagem.coluna) * personagem.spriteWidth, personagem.spriteHeight * personagem.linha,
+        personagem.spriteWidth, personagem.spriteHeight,
+        personagem.x, personagem.y,
         personagem.largura, personagem.altura
     );
 
@@ -285,9 +326,9 @@ function renderizar() {
         ctx.drawImage(imagemNPC, npcX, npcY, npcLargura, npcAltura);
 
         // Exibe a imagem final após os parabéns
-    if (mostrarFinal) {
-        ctx.drawImage(imagemFinal, larguraCanvas / 2 - larguraParabens / 2, alturaCanvas / 2 - alturaParabens / 2, larguraParabens, alturaParabens);
-    }
+        if (mostrarFinal) {
+            ctx.drawImage(imagemFinal, larguraCanvas / 2 - larguraParabens / 2, alturaCanvas / 2 - alturaParabens / 2, larguraParabens, alturaParabens);
+        }
     }
 }
 
@@ -298,7 +339,7 @@ const tempoMaximo = 1000 / 60; // Limitar a 60 FPS
 function loop() {
     atualizar();
     renderizar();
-    
+
 
     requestAnimationFrame(loop);
 }

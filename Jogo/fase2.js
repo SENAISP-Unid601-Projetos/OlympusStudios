@@ -7,6 +7,8 @@ const alturaCanvas = canvas.height;
 const larguraFrameSprite = 480;
 const alturaFrameSprite = 648;
 
+
+
 let personagem = {
     x: 100,
     y: 100,
@@ -92,19 +94,56 @@ const teclas = {
 };
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'w') teclas.w = true;
-    if (e.key === 'a') teclas.a = true;
-    if (e.key === 's') teclas.s = true;
-    if (e.key === 'd') teclas.d = true;
+    if (e.key === 'w') {
+        teclas.w = true;
+        personagem.linha = 1;
+        personagem.ultimalinha = 1;
+    };
+    if (e.key === 'a') {
+        teclas.a = true;
+        personagem.linha = 2;
+        personagem.ultimalinha = 2;
+    };
+    if (e.key === 's') {
+        teclas.s = true;
+        personagem.linha = 0;
+        personagem.ultimalinha = 0;
+    };
+    if (e.key === 'd') {
+        teclas.d = true;
+        personagem.linha = 3;
+        personagem.ultimalinha = 3;
+    };
+
+    if (personagem.coluna < 2.9) {
+        personagem.coluna += 0.05;
+    } else { personagem.coluna >= 2.9 };
 });
 
 document.addEventListener('keyup', (e) => {
-    if (e.key === 'w') teclas.w = false;
-    if (e.key === 'a') teclas.a = false;
-    if (e.key === 's') teclas.s = false;
-    if (e.key === 'd') teclas.d = false;
-    personagem.frame = 8; // Frame de descanso
+    if (e.key === 'w') {
+        teclas.w = false;
+    };
+    if (e.key === 'a') { teclas.a = false };
+    if (e.key === 's') { teclas.s = false };
+    if (e.key === 'd') { teclas.d = false };
+    if (!teclas.w && !teclas.a && !teclas.s && !teclas.d) {
+        personagem.linha = personagem.ultimalinha
+        personagem.coluna = 0;
+    }
+
 });
+
+// Função para atualizar a coluna da sprite
+function atualizarColuna() {
+    // Incrementa a coluna apenas se o personagem estiver em movimento
+    if (personagem.coluna < 2) {
+        personagem.coluna += 0.1; // Incrementa a coluna
+    } else {
+        personagem.coluna = 0; // Reseta a coluna
+    }
+}
+
 
 // Variável para a imagem de parabéns
 const imagemParabens = new Image();
@@ -170,11 +209,47 @@ function atualizar() {
     let novaPosicaoX = personagem.x;
     let novaPosicaoY = personagem.y;
 
-    if (teclas.w && novaPosicaoY > 0) novaPosicaoY -= personagem.velocidade;
-    if (teclas.a && novaPosicaoX > 0) novaPosicaoX -= personagem.velocidade;
-    if (teclas.s && novaPosicaoY < alturaCanvas - personagem.altura) novaPosicaoY += personagem.velocidade;
-    if (teclas.d && novaPosicaoX < larguraCanvas - personagem.largura) novaPosicaoX += personagem.velocidade;
+    // Verifica se alguma tecla de movimentação está pressionada
+    let movimento = false;
 
+    if (teclas.w && novaPosicaoY > 0) {
+        novaPosicaoY -= personagem.velocidade;
+        movimento = true; // Define que houve movimento
+        personagem.linha = 1; // Linha para cima
+    }
+    if (teclas.a && novaPosicaoX > 0) {
+        novaPosicaoX -= personagem.velocidade;
+        movimento = true; // Define que houve movimento
+        personagem.linha = 2; // Linha para esquerda
+    }
+    if (teclas.s && novaPosicaoY < alturaCanvas - personagem.altura) {
+        novaPosicaoY += personagem.velocidade;
+        movimento = true; // Define que houve movimento
+        personagem.linha = 0; // Linha para baixo
+    }
+    if (teclas.d && novaPosicaoX < larguraCanvas - personagem.largura) {
+        novaPosicaoX += personagem.velocidade;
+        movimento = true; // Define que houve movimento
+        personagem.linha = 3; // Linha para direita
+    }
+
+    let colisao = false;
+    obstaculos.forEach(obstaculo => {
+        if (detectarColisao({ x: novaPosicaoX, y: novaPosicaoY, largura: personagem.largura, altura: personagem.altura }, obstaculo)) {
+            colisao = true; // Define que houve colisão
+        }
+    });
+
+
+    // Atualiza a posição apenas se houve movimento
+    if (movimento && !colisao) {
+        personagem.x = novaPosicaoX;
+        personagem.y = novaPosicaoY;
+        atualizarColuna(); // Atualiza a coluna da animação
+    } else {
+        // Reseta a coluna se não houver movimento
+        personagem.coluna = 0;
+    }
     obstaculos.forEach(obstaculo => {
         if (detectarColisao({ x: novaPosicaoX, y: novaPosicaoY, largura: personagem.largura, altura: personagem.altura }, obstaculo)) {
             novaPosicaoX = personagem.x;
@@ -258,9 +333,9 @@ function atualizar() {
 // Função para detectar colisão
 function detectarColisao(retangulo1, retangulo2) {
     return retangulo1.x < retangulo2.x + retangulo2.largura &&
-           retangulo1.x + retangulo1.largura > retangulo2.x &&
-           retangulo1.y < retangulo2.y + retangulo2.altura &&
-           retangulo1.y + retangulo1.altura > retangulo2.y;
+        retangulo1.x + retangulo1.largura > retangulo2.x &&
+        retangulo1.y < retangulo2.y + retangulo2.altura &&
+        retangulo1.y + retangulo1.altura > retangulo2.y;
 }
 
 // Função de renderização
@@ -271,7 +346,11 @@ function renderizar() {
         ctx.drawImage(obstaculo.img, obstaculo.x, obstaculo.y, obstaculo.largura, obstaculo.altura);
     });
 
-    ctx.drawImage(personagem.spriteSheet, personagem.frame * personagem.spriteWidth, 0, personagem.spriteWidth, personagem.spriteHeight, personagem.x, personagem.y, personagem.largura, personagem.altura);
+    ctx.drawImage(personagem.spriteSheet, personagem.frame * personagem.spriteWidth, personagem.linha * personagem.spriteHeight, personagem.spriteWidth, personagem.spriteHeight, personagem.x, personagem.y, personagem.largura, personagem.altura);
+
+    if (personagem.x === 100 && personagem.y === 100) {
+        ctx.drawImage(personagem.spriteSheet, 0, 0, personagem.spriteWidth, personagem.spriteHeight, personagem.x, personagem.y, personagem.largura, personagem.altura);
+    }
 
     if (mostrarNPC) {
         ctx.drawImage(imagemNPC, npcX, npcY, npcLargura, npcAltura);

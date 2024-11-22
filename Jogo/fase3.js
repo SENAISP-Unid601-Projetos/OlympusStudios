@@ -4,6 +4,8 @@ const ctx = canvas.getContext('2d');
 const larguraCanvas = canvas.width;
 const alturaCanvas = canvas.height;
 
+
+
 // Variáveis para o NPC
 const imagemNPC = new Image();
 imagemNPC.src = 'falas/mirabellafala1.png'; // Substitua pelo caminho correto da imagem
@@ -34,20 +36,42 @@ imagemNPC.onload = () => {
     iniciarLoop();
 };
 
+
+
 // Função para iniciar o loop de renderização
 function iniciarLoop() {
     function loop() {
+        if (jogoPausado) {
+            return; // Se o jogo está pausado, o loop de animação não faz nada
+        }
         ctx.clearRect(0, 0, larguraCanvas, alturaCanvas);
 
         // Desenhar NPC (se visível)
         desenharNPC();
 
+        // Desenha o personagem e o inimigo
+        desenharPersonagem();
+        desenharInimigo();
+        
+
+        // Verifica a colisão entre o personagem e o inimigo
+        verificarColisaoComInimigo();
+        verificarColisaoComInimigo2();
+        
+        
+
         // Aqui você pode adicionar outros elementos do jogo
         requestAnimationFrame(loop);
+
+        const proximaFase3 = document.getElementById('proximaFase3');
+proximaFase3.style.display = 'none'; // Oculta o botão no início
     }
 
     loop();
 }
+
+// Variável para pausar o jogo
+let jogoPausado = false;
 
 // Carregamento da spritesheet
 const imgSpritesheet = new Image();
@@ -128,21 +152,20 @@ function moverPersonagem() {
     personagem.y = Math.max(0, Math.min(personagem.y, canvas.height - personagem.height));
 }
 
-// Função para verificar colisão entre o inimigo e o personagem
+// Função para verificar colisão entre o personagem e o inimigo
 function verificarColisaoComInimigo() {
+    // Lógica de colisão: verifica se as bordas do personagem e do inimigo se sobrepõem
     if (
-        personagem.x < inimigo.x + inimigo.width &&
+        personagem.x < inimigo.x + inimigo.largura &&
         personagem.x + personagem.width > inimigo.x &&
-        personagem.y < inimigo.y + inimigo.height &&
+        personagem.y < inimigo.y + inimigo.altura &&
         personagem.y + personagem.height > inimigo.y
     ) {
-        // Parar o jogo
-        jogoEmAndamento = false;
-
-        // Mostrar botão de reiniciar
-        mostrarBotaoReiniciar();
+        console.log("teste");
+        pausarJogo(); // Pausa o jogo quando a colisão é detectada
+        mostrarBotaoReiniciar(); // Exibe o botão para reiniciar o jogo
     }
-}   
+}
 
 // Função para verificar colisão com obstáculos
 function verificarColisaoComObstaculos() {
@@ -158,24 +181,23 @@ function verificarColisaoComObstaculos() {
     }
     return false;
 }
+function verificarFantasmasColetados() {
+    if (fantasmas.every(fantasma => !fantasma.visivel)) {
+        // Todos os fantasmas foram derrotados, então esconda os inimigos
+        inimigo.visivel = false;  // Esconde o inimigo 1 
+        inimigo2.visivel = false; // Esconde o inimigo 2 
 
-// Função para verificar colisão com os fantasmas
-function verificarColisaoComFantasma(fantasma) {
-    if (
-        personagem.x < fantasma.x + fantasma.largura &&
-        personagem.x + personagem.width > fantasma.x &&
-        personagem.y < fantasma.y + fantasma.height &&
-        personagem.y + personagem.height > fantasma.y
-    ) {
-        // Marcar o fantasma como derrotado
-        fantasma.visivel = false;
-        fantasmasDerrotados++;
-        if (fantasmasDerrotados === fantasmas.length) {
-            // Todos os fantasmas foram derrotados
-            finalizarFase(); // Chama a função para finalizar a fase
-        }
+        // Exibe o botão para avançar para a próxima fase
+        proximaFase3.style.display = 'block'; // Torna o botão visível
+        proximaFase3.onclick = function() {
+            window.location.href = 'fase4.html'; // Redireciona para a próxima fase
+        };
     }
-}   
+}
+
+
+
+
 
 // Função para finalizar a fase e mostrar a imagem de parabéns
 function finalizarFase() {
@@ -195,15 +217,15 @@ function mostrarParabens() {
     }, 4000);
 }
 
-// Função para verificar colisão com inimigo2
+// Função para verificar colisão com o segundo inimigo
 function verificarColisaoComInimigo2() {
     if (
-        personagem.x < inimigo2.x + inimigo2.width &&
-        personagem.x + personagem.width > inimigo2.x &&
-        personagem.y < inimigo2.y + inimigo2.height &&
-        personagem.y + personagem.height > inimigo2.y
+        personagem.x < inimigo2.x + inimigo2.largura&&
+        personagem.x + personagem.width> inimigo2.x &&
+        personagem.y < inimigo2.y + inimigo2.altura &&
+        personagem.y + personagem.height> inimigo2.y
     ) {
-        jogoEmAndamento = false;
+        pausarJogo();
         mostrarBotaoReiniciar();
     }
 }
@@ -212,8 +234,11 @@ function verificarColisaoComInimigo2() {
 function finalizarFase() {
     console.log("Fase finalizada!");
     jogoEmAndamento = false;
-    mostrarParabens();
+    mostrarBotaoAvancarFase();
+        
 }
+
+
 
 
 let fantasmas = [];
@@ -291,10 +316,12 @@ function carregarObstaculos() {
     });
 }
 
+let posicoesFantasmas = [];
+
 // Adiciona fantasmas ao serem carregadas as imagens
 carregarImagens(imagensFantasmas).then((imagensCarregadas) => {
     // Definindo posições fixas e velocidades iniciais para os fantasmas
-    const posicoesFantasmas = [
+    posicoesFantasmas = [
         { x: 900, y: 150, velocidadeX: 5, velocidadeY: 5 },
         { x: 400, y: 400, velocidadeX: 2, velocidadeY: 2 },
         { x: 600, y: 10, velocidadeX: 2, velocidadeY: 4 },
@@ -348,19 +375,25 @@ function ajustarCoordenadasFala1(x, y) {
     fala1.style.top = `${y}px`;
 }
 
+function mostrarBotaoReiniciar() {
+    restartButton.style.display = 'block'; // Exibe o botão
+    console.log("Botão de reiniciar exibido");
+}
+
+
 // Exemplo de uso para ajustar as dimensões e coordenadas de fala1
 ajustarDimensoesFala1(580, 'auto');
 ajustarCoordenadasFala1(900, 200);  // Ajuste as coordenadas conforme necessário
 
 
 
-// Movimentação do inimigo
 function movimentarInimigo() {
-    if (!inimigo.visivel) return; // Não movimenta o inimigo se ele ainda não estiver visível
+    if (!inimigo.visivel) return;
 
     let novoX = inimigo.x + inimigo.velocidadeX;
     let novoY = inimigo.y + inimigo.velocidadeY;
 
+    // Verifica colisão com obstáculos
     const colisaoComObstaculo = obstaculos.some(obstaculo => detectarColisao({
         x: novoX,
         y: novoY,
@@ -369,34 +402,24 @@ function movimentarInimigo() {
     }, obstaculo));
 
     if (colisaoComObstaculo) {
-        inimigo.velocidadeX *= -1;
-        inimigo.velocidadeY *= -1;
+        inimigo.velocidadeX *= -1; // Inverte a direção no eixo X
+        inimigo.velocidadeY *= -1; // Inverte a direção no eixo Y
     } else {
         inimigo.x = novoX;
         inimigo.y = novoY;
     }
 
+    // Verifica colisão com bordas do canvas
     if (inimigo.x < 0 || inimigo.x + inimigo.largura > larguraCanvas) {
         inimigo.velocidadeX *= -1;
     }
     if (inimigo.y < 0 || inimigo.y + inimigo.altura > alturaCanvas) {
         inimigo.velocidadeY *= -1;
     }
-
-    // // Verifica colisão com o personagem
-    // if (detectarColisao(personagem, inimigo)) {
-    //     restartButton.style.display = 'block'; // Exibe o botão de reiniciar fase
-
-    //     fantasma.visivel = false; // Fantasma derrotado
-    // fantasmasDerrotados++;
-
-    // verificarFantasmasColetados(); // Verifica se todos os fantasmas foram coletados
-
-    // if (fantasmasDerrotados === fantasmas.length) {
-    //     exibirParabens();
-    // }
-    // }
 }
+
+console.log("Obstáculos carregados:", obstaculos);
+console.log("Inimigos carregados:", inimigo, inimigo2);
 
 // Movimentação do segundo inimigo (Inimigo 2)
 function movimentarInimigo2() {
@@ -427,12 +450,7 @@ function movimentarInimigo2() {
         inimigo2.velocidadeY *= -1;
     }
 
-    // // Verifica colisão com o personagem
-    // if (detectarColisao(personagem, inimigo2)) {
-    //     inimigo2.visivel = false;  // Inimigo 2 se torna invisível
-    //     restartButton.style.display = 'block'; // Exibe o botão de reiniciar fase
-    //     pausarJogo(); // Pausa o jogo
-    // }
+   
 }
 
 // Função para verificar se todos os fantasmas foram derrotados
@@ -449,15 +467,22 @@ function verificarFantasmasColetados() {
     }
 }
 
+function capturarFantasma(fantasma) {
+    // Lógica para capturar o fantasma
+    fantasma.visivel = false; // Exemplo de como "capturar" um fantasma
+    
+    // Verifica se todos os fantasmas foram coletados
+    verificarFantasmasColetados();
+}
 
-// Movimentação dos fantasmas com colisão
+//fantasmas
 function movimentarFantasmas() {
     fantasmas.forEach(fantasma => {
         if (fantasma.visivel) {
             let novoX = fantasma.x + fantasma.velocidadeX;
             let novoY = fantasma.y + fantasma.velocidadeY;
 
-            // Checa colisão com obstáculos
+            // Verifica colisão com obstáculos
             const colisaoComObstaculo = obstaculos.some(obstaculo =>
                 detectarColisao(
                     { x: novoX, y: novoY, largura: fantasma.largura, altura: fantasma.altura },
@@ -473,36 +498,67 @@ function movimentarFantasmas() {
                 fantasma.y = novoY;
             }
 
-            // Checa colisão com as bordas do canvas
+            // Verifica colisão com bordas do canvas
             if (fantasma.x < 0 || fantasma.x + fantasma.largura > larguraCanvas) {
                 fantasma.velocidadeX *= -1;
             }
             if (fantasma.y < 0 || fantasma.y + fantasma.altura > alturaCanvas) {
                 fantasma.velocidadeY *= -1;
             }
-
-            // Checa colisão com o personagem
-            if (detectarColisao(personagem, fantasma)) {
-                fantasma.visivel = false; // Fantasma derrotado
-                fantasmasDerrotados++;
-
-                verificarFantasmasColetados(); // Verifica se todos os fantasmas foram coletados
-
-                if (fantasmasDerrotados === fantasmas.length) {
-                    exibirParabens();
-                }
-            }
         }
     });
 }
 
-// Função para detectar colisão
+
 function detectarColisao(rect1, rect2) {
-    return rect1.x < rect2.x + rect2.largura &&
+    //console.log("Personagem:", rect1.x, rect1.y, rect1.largura, rect1.altura);
+    //console.log("Inimigo:", rect2.x, rect2.y, rect2.largura, rect2.altura);
+
+    return (
+        rect1.x < rect2.x + rect2.largura &&
         rect1.x + rect1.largura > rect2.x &&
         rect1.y < rect2.y + rect2.altura &&
-        rect1.altura + rect1.y > rect2.y;
+        rect1.y + rect1.altura > rect2.y
+    );
 }
+
+// // Função para detectar colisão genérica
+// function detectarColisao(obj1, obj2) {
+//     return (
+//         obj1.x < obj2.x + obj2.largura &&
+//         obj1.x + obj1.width > obj2.x &&
+//         obj1.y < obj2.y + obj2.altura &&
+//         obj1.y + obj1.height > obj2.y
+//     );
+// }
+
+// Função para verificar colisões com inimigos
+
+
+function verificarColisoesFantasmas() {
+    fantasmas.forEach(fantasma => {
+        if (fantasma.visivel) {
+            console.log(`Fantasma em (${fantasma.x}, ${fantasma.y})`);
+            console.log(`Personagem em (${personagem.x}, ${personagem.y})`);
+            
+            if(
+                personagem.x < fantasma.x + fantasma.largura &&
+                personagem.x + personagem.width > fantasma.x &&
+                personagem.y <fantasma.y + fantasma.altura &&
+                personagem.y + personagem.height > fantasma.y
+            ){
+                console.log("Colisão detectada com fantasma!");
+                fantasma.visivel = false; // Marca o fantasma como coletado
+                fantasmasDerrotados++;
+            }
+        }
+    });
+
+    if (fantasmasDerrotados === fantasmas.length) {
+        finalizarFase();
+    }
+}
+
 
 // Função para exibir parabéns e depois a imagem final
 function exibirParabens() {
@@ -557,7 +613,7 @@ function finalizarFase() {
 
 // Imagem final após a mensagem de parabéns
 const imagemFinal = new Image();
-imagemFinal.src = 'falas/mirabellafala3.png'; // Substitua pelo caminho correto da imagem final
+imagemFinal.src = 'falas/mirabellafala2.png'; // Substitua pelo caminho correto da imagem final
 
 let exibirImagemFinal = false; // Controla a visibilidade da imagem final
 
@@ -603,17 +659,31 @@ function iniciarFase3() {
 
     // Game loop
     function loop() {
+        if (jogoPausado) return; // Se o jogo estiver pausado, não executa o loop
         ctx.clearRect(0, 0, larguraCanvas, alturaCanvas);
+        
         // movimentarPersonagem();
         movimentarInimigo();
         movimentarFantasmas();
         movimentarInimigo2();  // Chama a função para movimentar o segundo inimigo
         desenharPersonagem(); // Desenhar o personagem
     moverPersonagem(); // Mover o personagem
+    
+    verificarColisaoComObstaculos();
+
+    // Verifica colisões
+    verificarColisoesFantasmas();
     verificarColisaoComInimigo2();
     verificarColisaoComInimigo();
-    verificarColisaoComObstaculos()
-        
+
+     // Verifica se todos os fantasmas foram coletados
+     verificarFantasmasColetados();
+
+
+    
+    
+    
+    
         // Desenha o NPC
         desenharNPC(); // Chama a função para desenhar o NPC
 
@@ -622,9 +692,7 @@ function iniciarFase3() {
             return; // Sai do loop
         }
 
-        // // Desenha o personagem
-        // ctx.fillStyle = 'blue';
-        // ctx.fillRect(personagem.x, personagem.y, personagem.largura, personagem.altura);
+        
 
         // Desenha o inimigo
         if (inimigo.visivel) {
@@ -647,18 +715,7 @@ function iniciarFase3() {
             ctx.drawImage(obstaculo.img, obstaculo.x, obstaculo.y, obstaculo.largura, obstaculo.altura);
         });
 
-        // // Verifica colisão com o personagem
-        // if (detectarColisao(personagem, inimigo)) {
-        //     restartButton.style.display = 'block'; // Exibe o botão de reiniciar fase
-        //     pausarJogo(); // Pausa o jogo
-        // }
-
-        if (detectarColisao(personagem, inimigo2)) {
-            restartButton.style.display = 'block'; // Exibe o botão de reiniciar para o inimigo 2
-            pausarJogo(); // Pausa o jogo
-        }
-
-        // Desenha a imagem final, se necessário
+         // Desenha a imagem final, se necessário
     desenharImagemFinal();
 
         requestAnimationFrame(loop);
@@ -670,8 +727,11 @@ function iniciarFase3() {
 function verificarFantasmasColetados() {
     if (fantasmas.every(fantasma => !fantasma.visivel)) {
         // Todos os fantasmas foram derrotados, então esconda os inimigos
-        inimigo.visivel = false;  // Esconde o inimigo 1
-        inimigo2.visivel = false; // Esconde o inimigo 2
+        inimigo.visivel = false;  // Esconde o inimigo 1 
+        inimigo2.visivel = false; // Esconde o inimigo 2 
+
+        // Redireciona para a próxima fase
+        window.location.href = 'fase4.html'; // Redireciona para fase4.html
     }
 }
 
@@ -680,18 +740,23 @@ function esconderInimigos() {
     inimigo2.visivel = false;
 }
 
-// Variável para pausar o jogo
-let jogoPausado = false;
+
 
 // Função para pausar o jogo
 function pausarJogo() {
-    jogoPausado = true;
+    jogoPausado = true; // Definir o estado do jogo como pausado
+    console.log("Jogo pausado"); // Verifique se o jogo está pausado no console
 }
 
 // Função para reiniciar o jogo
 function reiniciarJogo() {
-    jogoPausado = false;
-    reiniciarFase();
+    jogoPausado = false; // Retorna o jogo ao estado de "em andamento"
+    // Reseta as variáveis do jogo (exemplo)
+    personagem.x = 100;
+    personagem.y = 100;
+    // Posicione outros elementos como inimigos e fantasmas conforme necessário
+    // Reinicie o loop de renderização
+    iniciarLoop();
 }
 
 // Evento do botão de reiniciar para atualizar a página
@@ -709,6 +774,8 @@ function mostrarBotaoAvancarFase() {
     });
 }
 
+
+
 // Inicialmente, o botão é ocultado
 proximaFase3.style.display = 'none';
 
@@ -719,6 +786,4 @@ window.addEventListener("keydown", (e) => {
 
 window.addEventListener("keyup", (e) => {
     teclasPressionadas[e.key] = false;
-}); 
-
-
+});

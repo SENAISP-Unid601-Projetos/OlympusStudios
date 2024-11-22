@@ -127,10 +127,13 @@ button:hover {
 #sobre-section ul li {
     font-size: 1.1em;
     margin: 5px 0;
+    height: 100%;
 }
 
+
+
 #sobre-section #btn-voltar {
-    display: inline-block;
+    display: flex;
     background-color: #555;
     color: #fff;
     border: none;
@@ -141,11 +144,20 @@ button:hover {
     margin-top: 30px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease, transform 0.3s ease;
+   
 }
+
+#voltar {
+    top: 500px;
+ 
+}
+
 
 #sobre-section #btn-voltar:hover {
     background-color: #333;
     transform: scale(1.05); /* Leve aumento no tamanho */
+    
+
 }
 
 @keyframes fadeIn {
@@ -160,4 +172,7 @@ button:hover {
 }
 
 
+#btn-sair {
+    display: none;
+}
 

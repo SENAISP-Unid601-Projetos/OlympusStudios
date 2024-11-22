@@ -42,3 +42,12 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'jogo.html'; // Substitua por sua página de jogo
     });
 });
+
+// Seleciona o botão 'Voltar' pelo ID
+const btnVoltar = document.getElementById('btn-voltar');
+
+// Adiciona o evento de clique ao botão 'Voltar'
+btnVoltar.addEventListener('click', () => {
+    // Redireciona para a página index.html
+    window.location.href = 'index.html';
+});
